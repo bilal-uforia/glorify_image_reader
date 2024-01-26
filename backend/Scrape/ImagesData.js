@@ -5,7 +5,7 @@ export const getImagesData = async (req, res) => {
     let browser = await puppeteer.launch();
     let page = await browser.newPage();
 
-    await page.goto("https://bloggingguide.com/best-health-and-fitness-blog-examples/", {
+    await page.goto("https://www.quicksprout.com/types-of-images-you-should-use-within-your-blog-posts/", {
         waitUntil: "load",
     });
 
@@ -25,9 +25,15 @@ export const getImagesData = async (req, res) => {
 
     });
 
+    const screenshot = await page.screenshot({
+        path: 'screenshot.png',
+        fullPage: true
+    });
+
     await browser.close();
+
     res.status(200);
-    res.json({ images, length: images.length });
+    res.json({ images, screenshot: Boolean(screenshot), length: images.length });
 }
 
 const autoScroll = async (page) => {
