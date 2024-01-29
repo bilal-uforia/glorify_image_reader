@@ -2,23 +2,17 @@ import puppeteer from "puppeteer"
 
 
 export const getImagesData = async (req, res) => {
-    let browser = await puppeteer.launch();
+    let browser = await puppeteer.launch({
+        defaultViewport: null
+    });
     let page = await browser.newPage();
 
     await page.goto("https://www.techtarget.com/whatis/definition/weblog", {
         waitUntil: "load",
     });
 
-    const dimensions = await page.evaluate(() => {
-        return {
-            width: window.innerWidth,
-            height: window.innerHeight,
-        }
-    })
-    console.log(dimensions);
 
-    await page.setViewport({ width: dimensions.width, height: dimensions.height });
-
+    await page.setViewport({ width: 1440, height: 867 });
 
     await autoScroll(page);
 
@@ -26,7 +20,8 @@ export const getImagesData = async (req, res) => {
         const imageElems = document.querySelectorAll("img");
         const imagesSrcs = []
         for (img of imageElems) {
-            imagesSrcs.push({ image: img.src, width: img.width, height: img.height });
+            let imgRect = img.getBoundingClientRect();
+            imagesSrcs.push({ image: img.src, width: imgRect.width, height: imgRect.height });
         }
 
         return imagesSrcs;
