@@ -5,11 +5,19 @@ export const getImagesData = async (req, res) => {
     let browser = await puppeteer.launch();
     let page = await browser.newPage();
 
-    await page.goto("https://www.quicksprout.com/types-of-images-you-should-use-within-your-blog-posts/", {
+    await page.goto("https://www.techtarget.com/whatis/definition/weblog", {
         waitUntil: "load",
     });
 
-    await page.setViewport({ width: 1440, height: 1024 });
+    const dimensions = await page.evaluate(() => {
+        return {
+            width: window.innerWidth,
+            height: window.innerHeight,
+        }
+    })
+    console.log(dimensions);
+
+    await page.setViewport({ width: dimensions.width, height: dimensions.height });
 
 
     await autoScroll(page);
