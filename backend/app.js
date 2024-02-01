@@ -5,7 +5,7 @@ import { getImagesData } from "./Scrape/ImagesData.js";
 app.use(express.json());
 
 app.get('/', (req, res) => {
-    res.send('Hello World!')
+    res.send('Hello Glorify Images!')
 });
 
 app.get("/get-images", getImagesData);
