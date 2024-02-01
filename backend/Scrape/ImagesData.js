@@ -13,7 +13,7 @@ export const getImagesData = async (req, res) => {
 
         await page.setViewport({ width: 1440, height: 867 });
 
-        await autoScroll(page);
+        // await autoScroll(page);
 
         const images = await page.evaluate(() => {
             const imageElems = document.querySelectorAll("img");
