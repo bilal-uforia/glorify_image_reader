@@ -16,7 +16,7 @@ export const getImagesData = async (req, res) => {
 
 
         await page.setViewport({ width: screen_width, height: screen_height });
-
+        console.log(page?.viewport());
         await autoScroll(page);
 
         const images = await page.evaluate(() => {
@@ -31,16 +31,16 @@ export const getImagesData = async (req, res) => {
 
         });
 
-        const screenshot = await page.screenshot({
-            path: 'screenshot.png',
-            fullPage: true
+        const body = await page.$("html")
+
+        const screenshot = await body.screenshot({
+            encoding: "base64"
         });
 
         await browser.close();
 
         res.status(200);
-        res.json({ images, screenshot: Boolean(screenshot), length: images.length });
-
+        res.json({ images, screenshot: screenshot, length: images.length });
     }
     catch (err) {
         console.log("Errror Occured: ", err);
