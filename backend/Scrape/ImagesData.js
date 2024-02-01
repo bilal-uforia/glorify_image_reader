@@ -2,9 +2,7 @@ import puppeteer from "puppeteer"
 
 
 export const getImagesData = async (req, res) => {
-    let browser = await puppeteer.launch({
-        defaultViewport: null
-    });
+    let browser = await puppeteer.launch();
     let page = await browser.newPage();
 
     await page.goto("https://www.techtarget.com/whatis/definition/weblog", {
