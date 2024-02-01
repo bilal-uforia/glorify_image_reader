@@ -8,6 +8,4 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
 });
 
-app.get("/get-images", getImagesData)
-
-app.get('/')
+app.get("/get-images", getImagesData);
