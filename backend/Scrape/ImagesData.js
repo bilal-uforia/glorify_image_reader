@@ -2,39 +2,45 @@ import puppeteer from "puppeteer"
 
 
 export const getImagesData = async (req, res) => {
-    let browser = await puppeteer.launch();
-    let page = await browser.newPage();
+    try {
+        let browser = await puppeteer.launch();
+        let page = await browser.newPage();
 
-    await page.goto("https://www.techtarget.com/whatis/definition/weblog", {
-        waitUntil: "load",
-    });
+        await page.goto("https://www.techtarget.com/whatis/definition/weblog", {
+            waitUntil: "load",
+        });
 
 
-    await page.setViewport({ width: 1440, height: 867 });
+        await page.setViewport({ width: 1440, height: 867 });
 
-    await autoScroll(page);
+        await autoScroll(page);
 
-    const images = await page.evaluate(() => {
-        const imageElems = document.querySelectorAll("img");
-        const imagesSrcs = []
-        for (img of imageElems) {
-            let imgRect = img.getBoundingClientRect();
-            imagesSrcs.push({ image: img.src, width: imgRect.width, height: imgRect.height });
-        }
+        const images = await page.evaluate(() => {
+            const imageElems = document.querySelectorAll("img");
+            const imagesSrcs = []
+            for (img of imageElems) {
+                let imgRect = img.getBoundingClientRect();
+                imagesSrcs.push({ image: img.src, width: imgRect.width, height: imgRect.height });
+            }
 
-        return imagesSrcs;
+            return imagesSrcs;
 
-    });
+        });
 
-    const screenshot = await page.screenshot({
-        path: 'screenshot.png',
-        fullPage: true
-    });
+        const screenshot = await page.screenshot({
+            path: 'screenshot.png',
+            fullPage: true
+        });
 
-    await browser.close();
+        await browser.close();
 
-    res.status(200);
-    res.json({ images, screenshot: Boolean(screenshot), length: images.length });
+        res.status(200);
+        res.json({ images, screenshot: Boolean(screenshot), length: images.length });
+
+    }
+    catch (err) {
+        console.log("Errror Occured: ", err);
+    }
 }
 
 const autoScroll = async (page) => {
