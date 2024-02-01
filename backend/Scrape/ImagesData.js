@@ -2,18 +2,22 @@ import puppeteer from "puppeteer"
 
 
 export const getImagesData = async (req, res) => {
+
     try {
+        console.log(req?.body);
+        const { url, screen_width, screen_height } = req?.body;
+
         let browser = await puppeteer.launch();
         let page = await browser.newPage();
 
-        await page.goto("https://www.techtarget.com/whatis/definition/weblog", {
+        await page.goto(url, {
             waitUntil: "load",
         });
 
 
-        await page.setViewport({ width: 1440, height: 867 });
+        await page.setViewport({ width: screen_width, height: screen_height });
 
-        // await autoScroll(page);
+        await autoScroll(page);
 
         const images = await page.evaluate(() => {
             const imageElems = document.querySelectorAll("img");

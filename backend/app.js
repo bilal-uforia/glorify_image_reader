@@ -1,6 +1,10 @@
 import express from "express";
-export const app = new express();
+import cors from "cors";
 import { getImagesData } from "./Scrape/ImagesData.js";
+
+export const app = new express();
+
+app.use(cors());
 
 app.use(express.json());
 
@@ -8,4 +12,6 @@ app.get('/', (req, res) => {
     res.send('Hello Glorify Images!')
 });
 
-app.get("/get-images", getImagesData);
+app.post('/get-images', getImagesData);
+
+// app.get("/get-images", getImagesData);
